@@ -1,0 +1,5 @@
+Container contains 1 element
+1: Author of aphorism: Emiliano Zapata;
+Content: I’d rather die on my feet, than live on my knees
+Evaluation: 5.
+Number of punctuation marks: 1.
