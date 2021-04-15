@@ -1,0 +1,3 @@
+Proverb of country: Africa;
+Content: A roaring lion kills nothing.
+Evaluation: 6.

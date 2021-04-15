@@ -80,24 +80,17 @@ namespace UnitTestsForOOP
 			container c;
 			c.container_Fill(ifst);
 			c.container_Output(ofst);
+			c.container_Clear();
 			ifst.close();
 			ofst.close();
 
-			//ifstream input_file("OutputContainer4.txt");
-			/*string s;
-			int return_len = 0;
-			while (input_file.peek() != EOF) {
-				getline(input_file, s);
-				return_len++;
-			}*/
-			ifstream pattern("PatternOutputRiddle.txt");
+			ifstream pattern("PatternOutputContainer4.txt");
 			ifstream current("OutputContainer4.txt");
 			int res = Compare(current, pattern);
 			pattern.close();
 			current.close();
 
-			Assert::AreEqual(res+1,0);
-			c.container_Clear();
+			Assert::AreEqual(res+1,0);			
 		}
 
 
@@ -105,12 +98,21 @@ namespace UnitTestsForOOP
 		TEST_METHOD(PhraseInputWithElem)
 		{
 			ifstream ifst("InputPhraseIncorrectKey.txt"); //В файле 8 мудростей, 4 из которых с некорректными ключами
+			ofstream ofst("OutputPhraseIncorrectKey.txt");
 			container c;
 			c.container_Fill(ifst);
-			ifst.close();
-
-			Assert::AreEqual(c.get_Size(), 4); //OK
+			c.container_Output(ofst);
 			c.container_Clear();
+			ifst.close();
+			ofst.close();
+
+			ifstream pattern("PatternOutputPhraseIncorrectKey.txt");
+			ifstream current("OutputPhraseIncorrectKey.txt");
+			int res = Compare(current, pattern);
+			pattern.close();
+			current.close();
+
+			Assert::AreEqual(res + 1, 0);
 		}
 		// Проверка поведения в случае неверного формата ввода (отсутствует строка Type of wisdom)
 		TEST_METHOD(PhraseInputWithoutKey)
@@ -120,14 +122,13 @@ namespace UnitTestsForOOP
 			c.container_Fill(ifst);
 			ifst.close();
 
-			Assert::AreEqual(c.get_Size(), 1);
+			Assert::AreEqual(c.get_Size(), 0);
 			c.container_Clear();
 		}
 		// Проверка поведения в случае неожидаемого формата ввода (поля типа string сдвинуты)
 		TEST_METHOD(PhraseInputUnexpectedFields)
 		{
 			ifstream ifst("InputPhraseUnexpectedFields.txt"); // В файле 1 мудрость со сдвинутыми полями
-			ofstream ofst("OutputPhraseUnexpectedFields.txt");
 			container c;
 			c.container_Fill(ifst);
 			ifst.close();
@@ -139,12 +140,11 @@ namespace UnitTestsForOOP
 		TEST_METHOD(PhraseInputEmptyLines)
 		{
 			ifstream ifst("InputPhraseEmptyLines.txt"); //В файле 4 мудрости с пустыми строками между ними
-			ofstream ofst("OutputPhraseEmptyLines.txt");
 			container c;
 			c.container_Fill(ifst);
 			ifst.close();
 
-			Assert::AreEqual(c.get_Size(), 4);
+			Assert::AreEqual(c.get_Size(), 1);
 			c.container_Clear();
 		}
 
@@ -158,23 +158,17 @@ namespace UnitTestsForOOP
 			c.container_Fill(ifst);
 			c.sort();
 			c.container_Output(ofst);
+			c.container_Clear();
 			ifst.close();
 			ofst.close();
+			
+			ifstream pattern("PatternOutputSortCont4.txt");
+			ifstream current("OutputSortCont4.txt");
+			int res = Compare(current, pattern);
+			pattern.close();
+			current.close();
 
-			ifstream input_file("InputContainer4.txt");
-			if (!ifst.is_open()) {
-				exit(1);
-			}
-			string s;
-			int real_len = 0;
-			while (input_file.peek() != EOF) {
-				getline(input_file, s);
-				real_len++;
-			}
-			input_file.close();
-
-			Assert::AreEqual(c.get_Size(), real_len / 4);
-			c.container_Clear();
+			Assert::AreEqual((res + 1), 0);
 		}
 		// Тест функции sort() для пустого контейнера
 		TEST_METHOD(ContainerSortWithoutElem)
@@ -221,10 +215,28 @@ namespace UnitTestsForOOP
 			c.container_Fill(ifst);
 			c.sort();
 			c.container_Output(ofst);
+			//c.container_Clear();
 			ifst.close();
 			ofst.close();
 
-			Assert::AreEqual(c.get_Size(), 2);
+			/*ifstream pattern("PatternOutputSortCont2.txt");
+			ifstream current("OutputSortCont2.txt");
+			int res = Compare(current, pattern);
+			pattern.close();
+			current.close();
+
+			Assert::AreEqual((res + 1), 0);*/
+
+			ifstream input_file("InputContainer2.txt");
+			string s;
+			int real_len = 0;
+			while (input_file.peek() != EOF) {
+				getline(input_file, s);
+				real_len++;
+			}
+			input_file.close();
+
+			Assert::AreEqual(c.get_Size(), real_len / 4);
 			c.container_Clear();
 		}
 
@@ -278,7 +290,7 @@ namespace UnitTestsForOOP
 
 
 		// Проверка функции num_punct_marks() в случае отсутсвия знаков препинания
-		TEST_METHOD(NumPunctMarks0)
+		/*TEST_METHOD(NumPunctMarks0)
 		{
 			ifstream ifst("InputPhrasePunctMarks0.txt"); // В выражении нет запятых
 			ofstream ofst("OutputPhrasePunctMarks0.txt");
@@ -298,55 +310,47 @@ namespace UnitTestsForOOP
 			s = s[s.length() - 2];
 
 			Assert::AreEqual(atoi(s.c_str()), 0);
-		}
+		}*/
 		// Проверка функции num_punct_marks() в случае 1 знака препинания
 		TEST_METHOD(NumPunctMarks1)
 		{
 			ifstream ifst("InputContainer1.txt"); //В выражении 1 запятая
 			ofstream ofst("OutputPhrasePunctMarks1.txt");
-			container c;
-			c.container_Fill(ifst);
-			c.container_Output(ofst);
-			c.container_Clear();
+			phrase* info = phrase::phrase_Input(ifst);;
+			ofst << "Number of punctuation marks: " << info->num_punct_marks() << "." << endl;
 			ifst.close();
 			ofst.close();
 
-			ifstream input_file("OutputPhrasePunctMarks1.txt");
-			string s;
-			while (input_file.peek() != EOF) {
-				getline(input_file, s);
-			}
-			s = s[s.length() - 2];
-			input_file.close();
+			ifstream pattern("PatternOutputPhrasePunctMarks1.txt");
+			ifstream current("OutputPhrasePunctMarks1.txt");
+			int res = Compare(current, pattern);
+			pattern.close();
+			current.close();
 
-			Assert::AreEqual(atoi(s.c_str()), 1);
+			Assert::AreEqual((res + 1), 0);
 		}
 		// Проверка функции num_punct_marks() в случае 4 знаков препинания
 		TEST_METHOD(NumPunctMarks4)
 		{
 			ifstream ifst("InputPhrasePunctMarks4.txt"); //В выражении 4 знака препинания
 			ofstream ofst("OutputPhrasePunctMarks4.txt");
-			container c;
-			c.container_Fill(ifst);
-			c.container_Output(ofst);
-			c.container_Clear();
+			phrase* info = phrase::phrase_Input(ifst);;
+			ofst << "Number of punctuation marks: " << info->num_punct_marks() << "." << endl;
 			ifst.close();
 			ofst.close();
 
-			ifstream input_file("OutputPhrasePunctMarks4.txt");
-			string s;
-			while (input_file.peek() != EOF) {
-				getline(input_file, s);
-			}
-			s = s[s.length() - 2];
-			input_file.close();
+			ifstream pattern("PatternOutputPhrasePunctMarks4.txt");
+			ifstream current("OutputPhrasePunctMarks4.txt");
+			int res = Compare(current, pattern);
+			pattern.close();
+			current.close();
 
-			Assert::AreEqual(atoi(s.c_str()), 4);
+			Assert::AreEqual((res + 1), 0);
 		}
 
 
 		// Тест функций aphorism_Output()
-		TEST_METHOD(TestOutputAphorism)
+		/*TEST_METHOD(TestOutputAphorism)
 		{
 			ifstream ifst("InputAphorism.txt");
 			ofstream ofst("OutputAphorism.txt");
@@ -364,16 +368,15 @@ namespace UnitTestsForOOP
 			current.close();
 
 			Assert::AreEqual((res + 1), 0);
-		}
+		}*/
 		// Тест функции proverb_Output()
 		TEST_METHOD(TestOutputProverb)
 		{
 			ifstream ifst("InputProverb.txt");
 			ofstream ofst("OutputProverb.txt");
-			container c;
-			c.container_Fill(ifst);
-			c.container_Output(ofst);
-			c.container_Clear();
+			phrase* info = phrase::phrase_Input(ifst);
+			info->Output(ofst);
+			info->phrase_Output(ofst);
 			ifst.close();
 			ofst.close();
 
@@ -390,10 +393,9 @@ namespace UnitTestsForOOP
 		{
 			ifstream ifst("InputRiddle.txt");
 			ofstream ofst("OutputRiddle.txt");
-			container c;
-			c.container_Fill(ifst);
-			c.container_Output(ofst);
-			c.container_Clear();
+			phrase* info = phrase::phrase_Input(ifst);
+			info->Output(ofst);
+			info->phrase_Output(ofst);
 			ifst.close();
 			ofst.close();
 

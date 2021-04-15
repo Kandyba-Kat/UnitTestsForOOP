@@ -1,0 +1,9 @@
+Container contains 2 element
+1: Proverb of country: Africa;
+Content: A roaring lion kills nothing!
+Evaluation: 6.
+Number of punctuation marks: 1.
+2: Author of aphorism: Emiliano Zapata;
+Content: I’d rather die on my feet, than live on my knees.
+Evaluation: 5.
+Number of punctuation marks: 2.
